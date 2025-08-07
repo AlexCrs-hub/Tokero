@@ -1,0 +1,18 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TokeroApp.LoginPage"
+             Title="Login">
+
+    <VerticalStackLayout Padding="30" Spacing="15" VerticalOptions="Center">
+
+        <Label Text="Welcome!" FontSize="24" HorizontalOptions="Center" />
+
+        <Entry x:Name="usernameEntry" Placeholder="Username or Email" />
+        <Entry x:Name="passwordEntry" Placeholder="Password" IsPassword="True" />
+
+        <Button Text="Login" Clicked="OnLoginClicked" />
+
+        <Label x:Name="messageLabel" TextColor="Red" FontSize="14" IsVisible="False" />
+
+    </VerticalStackLayout>
+</ContentPage>
