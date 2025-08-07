@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TokeroApp.DcaCalculatorPage"
+             Title="DcaCalculatorPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Select Cryptocurrency" FontAttributes="Bold" />
+            <Picker x:Name="cryptoPicker">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Bitcoin (BTC)</x:String>
+                        <x:String>Ethereum (ETH)</x:String>
+                        <x:String>Solana (SOL)</x:String>
+                        <x:String>Ripple (XRP)</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Label Text="Start Date" FontAttributes="Bold" />
+            <DatePicker x:Name="startDatePicker" />
+
+            <Label Text="Monthly Investment Amount (EUR)" FontAttributes="Bold" />
+            <Entry x:Name="amountEntry" Placeholder="e.g. 200" Keyboard="Numeric" />
+
+            <Label Text="Investment Day of Month" FontAttributes="Bold" />
+            <Entry x:Name="dayEntry" Placeholder="e.g. 15" Keyboard="Numeric" />
+
+            <Button Text="Calculate DCA" Clicked="OnCalculateClicked" />
+
+            <Label x:Name="resultTitle" Text="Results" FontSize="Medium" FontAttributes="Bold" IsVisible="False" />
+
+            <CollectionView x:Name="resultsView" IsVisible="False">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="5" BackgroundColor="#f1f1f1" Margin="0,5">
+                            <Label Text="{Binding Date}" />
+                            <Label Text="{Binding InvestedText}" />
+                            <Label Text="{Binding CoinAmountText}" />
+                            <Label Text="{Binding ValueTodayText}" />
+                            <Label Text="{Binding ROIText}" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

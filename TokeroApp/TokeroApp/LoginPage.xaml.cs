@@ -18,7 +18,7 @@ namespace TokeroApp
             if (IsValidLogin(username, password))
             {
                 // Navigate to MainPage or HomePage
-                Application.Current.MainPage = new MainPage();
+                Application.Current.MainPage = new NavigationPage(new DcaCalculatorPage());
             }
             else
             {
