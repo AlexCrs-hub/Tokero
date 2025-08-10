@@ -15,6 +15,6 @@ namespace TokeroApp.Model
 
         public string Symbol { get; set; }
         public DateTime Date { get; set; }
-        public decimal PriceUsd { get; set; }
+        public decimal PriceEur { get; set; }
     }
 }

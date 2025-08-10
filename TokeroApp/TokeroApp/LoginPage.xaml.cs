@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Maui.Controls;
+using TokeroApp.Services;
 
 namespace TokeroApp
 {
@@ -31,6 +32,15 @@ namespace TokeroApp
         {
             // Replace this with real authentication logic
             return username == "admin" && password == "password";
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var service = new CryptoPriceService();
+            var fetcher = new PriceFetcher(service, App.Database);
+            await fetcher.FetchAndStoreAsync();
         }
     }
 }

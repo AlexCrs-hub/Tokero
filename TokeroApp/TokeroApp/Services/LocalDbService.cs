@@ -35,5 +35,14 @@ namespace TokeroApp.Services
         {
             await _connection.InsertAsync(coin);
         }
+
+        public async Task<bool> PriceExistsAsync(string symbol, DateTime date)
+        {
+            var record = await _connection.Table<CryptoCoin>()
+                .Where(p => p.Symbol == symbol && p.Date == date)
+                .FirstOrDefaultAsync();
+
+            return record != null;
+        }
     }
 }
