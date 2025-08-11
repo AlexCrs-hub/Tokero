@@ -44,5 +44,24 @@ namespace TokeroApp.Services
 
             return record != null;
         }
+
+        public async Task<decimal?> GetPriceForDateAsync(string symbol, DateTime date)
+        {
+            var record = await _connection.Table<CryptoCoin>()
+               .Where(p => p.Symbol == symbol && p.Date.Date == date)
+               .FirstOrDefaultAsync();
+
+            return record?.PriceEur;
+        }
+
+        public async Task<decimal?> GetLatestPriceAsync(string symbol, DateTime date)
+        {
+            var record = await _connection.Table<CryptoCoin>()
+                .Where(p => p.Symbol == symbol && p.Date <= date)
+                .OrderByDescending(p => p.Date)
+                .FirstOrDefaultAsync();
+
+            return record?.PriceEur;
+        }
     }
 }

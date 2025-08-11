@@ -21,7 +21,7 @@
             <Label Text="Start Date" FontAttributes="Bold" />
             <DatePicker x:Name="startDatePicker" />
 
-            <Label Text="Monthly Investment Amount (USD)" FontAttributes="Bold" />
+            <Label Text="Monthly Investment Amount (EUR)" FontAttributes="Bold" />
             <Entry x:Name="amountEntry" Placeholder="e.g. 200" Keyboard="Numeric" />
 
             <Label Text="Investment Day of Month" FontAttributes="Bold" />

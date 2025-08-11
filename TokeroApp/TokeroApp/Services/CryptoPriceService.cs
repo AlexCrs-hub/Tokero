@@ -13,7 +13,7 @@ namespace TokeroApp.Services
     public class CryptoPriceService
     {
         private readonly HttpClient _client = new();
-        private readonly string _apiKey = "";
+        private readonly string _apiKey = "CG-7m4c4NYhfXtAwpWK3YipPNH7";
 
         public CryptoPriceService()
         {
