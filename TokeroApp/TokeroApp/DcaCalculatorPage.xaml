@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TokeroApp.DcaCalculatorPage"
-             Title="DcaCalculatorPage">
+             Title="DCA Calculator">
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -13,36 +13,93 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            
+                        <Grid Padding="5" ColumnSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Checkbox -->
+                                <ColumnDefinition Width="2*" />
+                                <!-- Coin Name -->
+                                <ColumnDefinition Width="1.5*" />
+                                <!-- Investment Entry -->
+                                <ColumnDefinition Width="2*" />
+                                <!-- Start Date Label -->
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}"/>
+                            <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center"/>
+                            <Entry Grid.Column="2"
+                                   Placeholder="EUR invested"
+                                   Keyboard="Numeric"
+                                   Text="{Binding InvestmentAmount, Mode=TwoWay}"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="Start Date:" VerticalOptions="Center" />
+                            <DatePicker Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                        Date="{Binding StartDate, Mode=TwoWay}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Label Text="Start Date" FontAttributes="Bold" />
-            <DatePicker x:Name="startDatePicker" />
-
-            <Label Text="Monthly Investment Amount (EUR)" FontAttributes="Bold" />
-            <Entry x:Name="amountEntry" Placeholder="e.g. 200" Keyboard="Numeric" />
-
             <Label Text="Investment Day of Month" FontAttributes="Bold" />
-            <Entry x:Name="dayEntry" Placeholder="e.g. 15" Keyboard="Numeric" />
+            <Picker x:Name="dayPicker">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:Int32}">
+                        <x:Int32>15</x:Int32>
+                        <x:Int32>20</x:Int32>
+                        <x:Int32>25</x:Int32>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
 
             <Button Text="Calculate DCA" Clicked="OnCalculateClicked" />
 
             <Label x:Name="resultTitle" Text="Results" FontSize="Medium" FontAttributes="Bold" IsVisible="False" />
 
+            <Grid Padding="5" ColumnSpacing="10" BackgroundColor="AntiqueWhite" Margin="0,5" 
+                  IsVisible="{Binding Source={x:Reference resultsView}, Path=IsVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="Name" FontAttributes="Bold" />
+                <Label Grid.Column="1" Text="Date" FontAttributes="Bold" />
+                <Label Grid.Column="2" Text="Invested" FontAttributes="Bold" />
+                <Label Grid.Column="3" Text="Coin Amount" FontAttributes="Bold" />
+                <Label Grid.Column="4" Text="Value Today" FontAttributes="Bold" />
+                <Label Grid.Column="5" Text="ROI" FontAttributes="Bold" />
+            </Grid>
+
             <CollectionView x:Name="resultsView" IsVisible="False">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout Padding="5" BackgroundColor="#f1f1f1" Margin="0,5">
-                            <Label Text="{Binding Date}" />
-                            <Label Text="{Binding InvestedText}" />
-                            <Label Text="{Binding CoinAmountText}" />
-                            <Label Text="{Binding ValueTodayText}" />
-                            <Label Text="{Binding ROIText}" />
-                        </VerticalStackLayout>
+                        <Grid Padding="5" ColumnSpacing="10" BackgroundColor="#f1f1f1" Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Text="{Binding Name}" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="{Binding Date}" VerticalOptions="Center" />
+                            <Label Grid.Column="2" Text="{Binding InvestedText}" VerticalOptions="Center" />
+                            <Label Grid.Column="3" Text="{Binding CoinAmountText}" VerticalOptions="Center" />
+                            <Label Grid.Column="4" Text="{Binding ValueTodayText}" VerticalOptions="Center" />
+                            <Label Grid.Column="5" Text="{Binding ROIText}" VerticalOptions="Center" />
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

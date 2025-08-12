@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,21 @@ namespace TokeroApp.Services
                 .FirstOrDefaultAsync();
 
             return record?.PriceEur;
+        }
+
+        public async Task<List<CryptoSelection>> GetDistinctCoinsAsync()
+        {
+            var allPrices = await _connection.Table<CryptoCoin>().ToListAsync();
+            return allPrices
+                .Select(p => p.Symbol)
+                .Distinct()
+                .Select(symbol => new CryptoSelection
+                {
+                    Id = symbol,
+                    Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(symbol),
+                    IsSelected = false
+                })
+                .ToList();
         }
     }
 }
