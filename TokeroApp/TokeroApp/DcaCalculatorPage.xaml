@@ -9,7 +9,7 @@
             <Label Text="Select Cryptocurrency" FontAttributes="Bold" />
             <CollectionView x:Name="cryptoCollection" SelectionMode="Multiple">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="2"/>
+                    <GridItemsLayout Orientation="Vertical" Span="1"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
