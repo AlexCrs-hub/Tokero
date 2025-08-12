@@ -7,16 +7,18 @@
         <VerticalStackLayout Padding="20" Spacing="15">
 
             <Label Text="Select Cryptocurrency" FontAttributes="Bold" />
-            <Picker x:Name="cryptoPicker">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Bitcoin (BTC)</x:String>
-                        <x:String>Ethereum (ETH)</x:String>
-                        <x:String>Solana (SOL)</x:String>
-                        <x:String>Ripple (XRP)</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+            <CollectionView x:Name="cryptoCollection" SelectionMode="Multiple">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
             <Label Text="Start Date" FontAttributes="Bold" />
             <DatePicker x:Name="startDatePicker" />
@@ -44,7 +46,12 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
+            <StackLayout x:Name="summary" IsVisible="False" Padding="10" BackgroundColor="BlueViolet">
+                <Label x:Name="totalInvesteLabel" FontAttributes="Bold"/>
+                <Label x:Name="totalCoinOwnedLabel" FontAttributes="Bold"/>
+                <Label x:Name="currentValueLabel" FontAttributes="Bold"/>
+                <Label x:Name="portofolioTotalLabel" FontAttributes="Bold"/>
+            </StackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

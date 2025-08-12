@@ -25,13 +25,14 @@ public partial class DcaCalculatorPage : ContentPage
     {
         // Clear previous results
         Results.Clear();
+        summary.IsVisible = false;
 
         // Input validation
         if (cryptoPicker.SelectedIndex == -1 || 
             string.IsNullOrWhiteSpace(amountEntry.Text) || 
             string.IsNullOrWhiteSpace(dayEntry.Text))
         {
-            DisplayAlert("Missing Info", "Please fill in all fields.", "OK");
+            await DisplayAlert("Missing Info", "Please fill in all fields.", "OK");
             return;
         }
 
@@ -44,11 +45,16 @@ public partial class DcaCalculatorPage : ContentPage
         DateTime today = DateTime.Today;
         DateTime current = startDate;
 
+        decimal? currentPrice = await App.Database.GetLatestPriceAsync(coinId, today);
+
+        decimal totalCoins = 0m;
+        decimal totalInvested = 0m;
+
         // Loop through each month from start to today
         while (current <= today)
         {
             decimal? buyPrice = await App.Database.GetLatestPriceAsync(coinId, current);
-            decimal? currentPrice = await App.Database.GetLatestPriceAsync(coinId, today);
+            
 
             if(buyPrice.HasValue && currentPrice.HasValue)
             {
@@ -63,13 +69,26 @@ public partial class DcaCalculatorPage : ContentPage
                     ValueToday = valueToday
                 });
 
-                current = current.AddMonths(1);
-                current = new DateTime(current.Year, current.Month, Math.Min(dayOfMonth, DateTime.DaysInMonth(current.Year, current.Month)));
+                totalInvested += monthlyAmount;
+                totalCoins += coinAmount;
             }
+            current = current.AddMonths(1);
+            current = new DateTime(current.Year, current.Month, Math.Min(dayOfMonth, DateTime.DaysInMonth(current.Year, current.Month)));
+        }
+
+        if (currentPrice.HasValue)
+        {
+            decimal portofolioValue = totalCoins * currentPrice.Value;
+
+            totalInvesteLabel.Text = $"Total invested: €{totalInvested:F2}";
+            totalCoinOwnedLabel.Text = $"Total coins owned: {totalCoins:F6}";
+            currentValueLabel.Text = $"Current value of {crypto}: €{portofolioValue:F2}";
+            portofolioTotalLabel.Text = $"Portofolio value: €{portofolioValue:F2}";
         }
 
         resultTitle.IsVisible = true;
         resultsView.IsVisible = true;
+        summary.IsVisible = true;
     }
     
 }
