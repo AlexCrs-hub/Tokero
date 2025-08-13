@@ -14,6 +14,7 @@ public partial class DcaCalculatorPage : ContentPage
         resultsView.ItemsSource = Results;
     }
 
+    //populating the list of coins with the ones in the database
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -24,14 +25,15 @@ public partial class DcaCalculatorPage : ContentPage
 
     private async void OnCalculateClicked(object sender, EventArgs e)
     {
-        // Clear previous results
+        // clear previous results
         Results.Clear();
         summary.IsVisible = false;
 
+        // get the list of selected coins
         var allCoins = (List<CryptoSelection>)cryptoCollection.ItemsSource;
         var selectedCoins = allCoins.Where(c => c.IsSelected).ToList();
 
-        // Input validation
+        // input validation
         if (!selectedCoins.Any() || 
             dayPicker.SelectedIndex == -1)
         {
@@ -48,7 +50,7 @@ public partial class DcaCalculatorPage : ContentPage
 
         var coinSummaries = new List<string>();
 
-        // Loop through each coin and each month from start to today
+        // loop through each coin and each month from start to today
         foreach(var coin in selectedCoins)
         {
             string coinId = coin.Id;
@@ -58,18 +60,27 @@ public partial class DcaCalculatorPage : ContentPage
             decimal monthlyAmount = coin.InvestmentAmount;
             decimal investedInCoin = 0m;
             decimal totalCoins = 0m;
+
+            // get the latest price
+            // can't get the actual today price since in the
+            // db there is only the price for the 15th 20th and 25th, so it gets the most recent
             decimal? latestPrice = await App.Database.GetLatestPriceAsync(coinId, today);
 
             DateTime current = new DateTime(startDate.Year, startDate.Month, dayOfMonth);
 
+            // increase the curret month if it there is no investment to be done in it
+            // i.e. if the investment day is 15th and the start date is after that
             if (startDate > current)
             {
                 current = current.AddMonths(1);
                 current = new DateTime(current.Year, current.Month, dayOfMonth);
             }
 
+            // iterate until the present date to get the result rows
             while (current <= today)
             {
+                // could do with the price on the exact day,
+                // but the API has some missing data so we get the most recent to the date
                 decimal? buyPrice = await App.Database.GetLatestPriceAsync(coinId, current);
                 if(latestPrice.HasValue && buyPrice.HasValue)
                 {
@@ -93,13 +104,16 @@ public partial class DcaCalculatorPage : ContentPage
                 current = new DateTime(current.Year, current.Month, dayOfMonth);
             }
             if (latestPrice.HasValue)
-            {
+            {   
+                // calculating the total values of the investements
                 decimal portofolioValue = totalCoins * latestPrice.Value;
                 totalInvested += investedInCoin;
                 totalPortofolio += portofolioValue;
                 coinSummaries.Add($"{coin.Name}: {totalCoins:F6} coins, €{portofolioValue:F2}");
             }
         }
+
+        // updating the labels with the results
         totalInvesteLabel.Text = $"Total invested (all coins): €{totalInvested:F2}";
         totalCoinOwnedLabel.Text = string.Join("\n", coinSummaries);
         currentValueLabel.Text = $"Portofolio current value: €{totalPortofolio:F2}";

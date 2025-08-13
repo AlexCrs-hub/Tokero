@@ -28,7 +28,7 @@ namespace TokeroApp.Services
             _client.DefaultRequestHeaders.Add("x-cg-demo-api-key", _apiKey);
         }
 
-
+        // API call to get the top 10 coins
         public async Task<List<string>> GetTopCoinIdsAsync(int limit = 10)
         {
             var url = $"coins/markets?vs_currency=eur&order=market_cap_desc&per_page={limit}&page=1";
@@ -49,6 +49,7 @@ namespace TokeroApp.Services
             }
         }
 
+        // API call to get the prices for the coins (the API only provides data within one year)
         public async Task<decimal?> GetHistoricalPricesAsync(string coinId, DateTime date)
         {
             string formattedDate = date.ToString("dd-MM-yyyy");

@@ -30,7 +30,6 @@ namespace TokeroApp
 
         private bool IsValidLogin(string username, string password)
         {
-            // Replace this with real authentication logic
             return username == "admin" && password == "password";
         }
 

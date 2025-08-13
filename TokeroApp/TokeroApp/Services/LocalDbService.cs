@@ -17,8 +17,10 @@ namespace TokeroApp.Services
         private readonly SQLiteAsyncConnection _connection;
 
         public LocalDbService()
-        {
-            Debug.WriteLine($"Here:  {AppContext.BaseDirectory}");
+        {   
+
+            // use clone db if it exists, otherwise create a new one
+            // beware that if creating a new db, you have to make an API key to populate it
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, DB_NAME);
             if (!File.Exists(dbPath))
             {
@@ -65,15 +67,6 @@ namespace TokeroApp.Services
             return record != null;
         }
 
-        public async Task<decimal?> GetPriceForDateAsync(string symbol, DateTime date)
-        {
-            var record = await _connection.Table<CryptoCoin>()
-               .Where(p => p.Symbol == symbol && p.Date.Date == date)
-               .FirstOrDefaultAsync();
-
-            return record?.PriceEur;
-        }
-
         public async Task<decimal?> GetLatestPriceAsync(string symbol, DateTime date)
         {
             var record = await _connection.Table<CryptoCoin>()
@@ -84,6 +77,7 @@ namespace TokeroApp.Services
             return record?.PriceEur;
         }
 
+        //get the lsit of distinct coins to populate the selection list in the UI
         public async Task<List<CryptoSelection>> GetDistinctCoinsAsync()
         {
             var allPrices = await _connection.Table<CryptoCoin>().ToListAsync();

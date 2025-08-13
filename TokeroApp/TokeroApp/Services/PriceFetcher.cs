@@ -19,6 +19,7 @@ namespace TokeroApp.Services
             _localDbService = localDbService;
         }   
 
+        // function to populate teh db with the API data on the 15th 20th and 25th of each month
         public async Task FetchAndStoreAsync()
         {
             var topCoinIds = await _cryptoPriceService.GetTopCoinIdsAsync();
@@ -26,9 +27,10 @@ namespace TokeroApp.Services
 
             if (topCoinIds == null || !topCoinIds.Any())
             {
-                return; // Exit early
+                return; // exit early
             }
 
+            // need to do this since the API provides data within one year
             DateTime start = DateTime.Today.AddDays(-365);
             DateTime end = DateTime.Today;
 
@@ -53,14 +55,15 @@ namespace TokeroApp.Services
 
                     foreach ( var coinId in topCoinIds)
                     {
-
+                        // checks if the data exists such that it does not update the db with duplicates at new runs
                         bool exists = await _localDbService.PriceExistsAsync(coinId, targetDate);
                         if (exists)
                         {
-                            //Debug.WriteLine($"Record already exists for coin {coinId} and date {targetDate::dd-MM-yyyy} , skipping.");
+                            Debug.WriteLine($"Record already exists for coin {coinId} and date {targetDate::dd-MM-yyyy} , skipping.");
                             continue;
                         }
 
+                        // populating the database with the prices from the API
                         var price = await _cryptoPriceService.GetHistoricalPricesAsync(coinId, targetDate);
                         if (price.HasValue)
                         {
