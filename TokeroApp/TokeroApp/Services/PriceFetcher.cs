@@ -57,7 +57,7 @@ namespace TokeroApp.Services
                         bool exists = await _localDbService.PriceExistsAsync(coinId, targetDate);
                         if (exists)
                         {
-                            Debug.WriteLine($"Record already exists for coin {coinId} and date {targetDate::dd-MM-yyyy} , skipping.");
+                            //Debug.WriteLine($"Record already exists for coin {coinId} and date {targetDate::dd-MM-yyyy} , skipping.");
                             continue;
                         }
 

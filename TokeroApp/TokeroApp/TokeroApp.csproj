@@ -78,4 +78,9 @@
 	  <Folder Include="Files\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="clone_db.db3">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,29 @@ namespace TokeroApp.Services
     public class LocalDbService
     {
         private const string DB_NAME = "crypto_db.db3";
+        private const string CLONE_DB = "clone_db.db3";
         private readonly SQLiteAsyncConnection _connection;
 
         public LocalDbService()
         {
-            _connection = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_NAME));
+            Debug.WriteLine($"Here:  {AppContext.BaseDirectory}");
+            string dbPath = Path.Combine(FileSystem.AppDataDirectory, DB_NAME);
+            if (!File.Exists(dbPath))
+            {
+                string sampleDbPath = Path.Combine(AppContext.BaseDirectory, CLONE_DB);
+
+                if (File.Exists(sampleDbPath))
+                {
+                    File.Copy(sampleDbPath, dbPath);
+                    Debug.WriteLine("Clone DB copied to local app data directory.");
+                }
+                else
+                {
+                    Debug.WriteLine("No sample DB found — creating new database.");
+                }
+            }
+
+            _connection = new SQLiteAsyncConnection(dbPath);
             _connection.CreateTableAsync<CryptoCoin>();
         }
 
