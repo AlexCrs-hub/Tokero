@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Net.Http.Headers;
 using System.Diagnostics;
-using Microsoft.UI;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TokeroApp.Services
