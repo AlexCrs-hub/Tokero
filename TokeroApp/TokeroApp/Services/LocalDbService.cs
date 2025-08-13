@@ -67,6 +67,7 @@ namespace TokeroApp.Services
             return record != null;
         }
 
+        //get closest price to the given date
         public async Task<decimal?> GetLatestPriceAsync(string symbol, DateTime date)
         {
             var record = await _connection.Table<CryptoCoin>()
