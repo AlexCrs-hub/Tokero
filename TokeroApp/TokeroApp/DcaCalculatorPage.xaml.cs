@@ -5,7 +5,8 @@ using TokeroApp.Model;
 namespace TokeroApp;
 
 public partial class DcaCalculatorPage : ContentPage
-{
+{   
+    // initializes the results as an empty collection
     public ObservableCollection<DcaResultRow> Results { get; set; } = new();
 
     public DcaCalculatorPage()

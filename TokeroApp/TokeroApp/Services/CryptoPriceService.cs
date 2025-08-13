@@ -40,6 +40,7 @@ namespace TokeroApp.Services
                 var json = await response.Content.ReadAsStringAsync();
                 var data = JArray.Parse(json);
 
+                //returns the first 10 in the list
                 return data.Select(c => c["id"]!.ToString()).Take(limit).ToList();
             }
             catch (HttpRequestException ex)
