@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using TokeroApp.Model;
 
@@ -11,15 +12,6 @@ public partial class DcaCalculatorPage : ContentPage
     {
         InitializeComponent();
         resultsView.ItemsSource = Results;
-    }
-
-    private string GetCoinIdFromPicker(string pickerValue)
-    {
-        if (pickerValue.Contains("Bitcoin")) return "bitcoin";
-        if (pickerValue.Contains("Ethereum")) return "ethereum";
-        if (pickerValue.Contains("Solana")) return "solana";
-        if (pickerValue.Contains("Ripple")) return "ripple";
-        return pickerValue.ToLower();
     }
 
     protected override async void OnAppearing()
@@ -68,9 +60,15 @@ public partial class DcaCalculatorPage : ContentPage
             decimal totalCoins = 0m;
             decimal? latestPrice = await App.Database.GetLatestPriceAsync(coinId, today);
 
-            DateTime current = startDate;
+            DateTime current = new DateTime(startDate.Year, startDate.Month, dayOfMonth);
 
-            while(current <= today)
+            if (startDate > current)
+            {
+                current = current.AddMonths(1);
+                current = new DateTime(current.Year, current.Month, dayOfMonth);
+            }
+
+            while (current <= today)
             {
                 decimal? buyPrice = await App.Database.GetLatestPriceAsync(coinId, current);
                 if(latestPrice.HasValue && buyPrice.HasValue)
@@ -92,8 +90,7 @@ public partial class DcaCalculatorPage : ContentPage
                 }
 
                 current = current.AddMonths(1);
-                current = new DateTime(current.Year, current.Month,
-                    Math.Min(dayOfMonth, DateTime.DaysInMonth(current.Year, current.Month)));
+                current = new DateTime(current.Year, current.Month, dayOfMonth);
             }
             if (latestPrice.HasValue)
             {

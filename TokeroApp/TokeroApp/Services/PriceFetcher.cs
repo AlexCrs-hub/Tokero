@@ -24,6 +24,11 @@ namespace TokeroApp.Services
             var topCoinIds = await _cryptoPriceService.GetTopCoinIdsAsync();
             var targetDays = new[] { 15, 20, 25 };
 
+            if (topCoinIds == null || !topCoinIds.Any())
+            {
+                return; // Exit early
+            }
+
             DateTime start = DateTime.Today.AddDays(-365);
             DateTime end = DateTime.Today;
 
